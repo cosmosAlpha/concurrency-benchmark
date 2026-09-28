@@ -1,0 +1,13 @@
+package com.jdev.prodready.concurrency.benchmark;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class ConcurrencyBenchmarkApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(ConcurrencyBenchmarkApplication.class, args);
+	}
+
+}

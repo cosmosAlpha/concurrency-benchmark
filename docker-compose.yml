@@ -1,0 +1,48 @@
+version: '3.8'
+networks:
+  k6:
+    name: k6-network
+    driver: bridge
+services:
+  prometheus:
+    image: prom/prometheus:latest
+    command:
+      - --web.enable-remote-write-receiver
+      - --enable-feature=native-histograms
+      - --config.file=/etc/prometheus/prometheus.yml
+    networks:
+      - k6
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prom/prometheus.yml:/etc/prometheus/prometheus.yml
+  grafana:
+    image: grafana/grafana:latest
+    networks:
+      - k6
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_BASIC_ENABLED=false
+    volumes:
+      - ./grafana/grafana-ds.yml:/etc/grafana/provisioning/datasources/datasources.yml
+  k6:
+    image: grafana/k6:latest
+    networks:
+      - k6
+    volumes:
+      - ./k6-scripts:/scripts
+    environment:
+      - K6_PROMETHEUS_RW_SERVER_URL=http://prometheus:9090/api/v1/write
+      - K6_PROMETHEUS_RW_TREND_STATS=p(95),p(99),min,max
+      - K6_PROMETHEUS_RW_TREND_AS_NATIVE_HISTOGRAM=true
+      # 1. Drop heavy, granular sub-metrics
+      - K6_PROMETHEUS_RW_FILTER_DATA=+*, -http_req_connecting, -http_req_tls_handshaking, -http_req_blocked, -http_req_waiting, -http_req_sending
+
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    command: run -o experimental-prometheus-rw /scripts/benchmark-100k.js
+    depends_on:
+      - prometheus

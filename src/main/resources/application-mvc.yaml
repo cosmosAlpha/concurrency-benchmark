@@ -1,0 +1,9 @@
+server:
+  port: 8081
+  tomcat:
+    threads:
+      max: 200 # Standard carrier thread capacity; virtual threads take over task processing
+spring:
+  threads:
+    virtual:
+      enabled: true # Enables JDK 21+ Virtual Threads for Tomcat protocol handlers
