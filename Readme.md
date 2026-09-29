@@ -116,7 +116,7 @@ k6 run -o experimental-prometheus-rw your-script.js
 6. Add another dashboard using same above process for Dashboard Id **`19004`** for JVM metrics 
 
 
-### Hard prune docker network in case of grafana and prometheus failure
+### Hard prune docker network in case of grafana and prometheus communication fails
 ```bash
 docker network prune -f
 ```

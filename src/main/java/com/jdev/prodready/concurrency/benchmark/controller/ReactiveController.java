@@ -14,7 +14,7 @@ public class ReactiveController {
     @GetMapping("/reactive-io")
     public Mono<String> simulateWork() {
         // Non-blocking delay of 100ms using Reactor timers
-        return Mono.delay(Duration.ofMillis(100))
+        return Mono.delay(Duration.ofMillis(200))
                 .map(i -> "Processed on: " + Thread.currentThread().toString());
     }
 }

@@ -24,8 +24,8 @@ export const options = {
 
 export default function () {
     // Toggle endpoint URL between 8081 (Virtual Threads) and 8082 (WebFlux)
-    const url = __ENV.TARGET_URL || 'http://host.docker.internal:8081/api/v1/reactive-io';
-    //const url = __ENV.TARGET_URL || 'http://host.docker.internal:8081/api/v1/virtual-io';
+    //const url = __ENV.TARGET_URL || 'http://host.docker.internal:8081/api/v1/reactive-io';
+    const url = __ENV.TARGET_URL || 'http://host.docker.internal:8081/api/v1/virtual-io';
 
     const params = {
         headers: {

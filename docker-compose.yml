@@ -5,7 +5,7 @@ networks:
     driver: bridge
 services:
   prometheus:
-    image: prom/prometheus:latest
+    image: prom/prometheus:v3.15.0
     command:
       - --web.enable-remote-write-receiver
       - --enable-feature=native-histograms
@@ -17,7 +17,7 @@ services:
     volumes:
       - ./prom/prometheus.yml:/etc/prometheus/prometheus.yml
   grafana:
-    image: grafana/grafana:latest
+    image: grafana/grafana:13.0-slim
     networks:
       - k6
     ports:
@@ -29,7 +29,7 @@ services:
     volumes:
       - ./grafana/grafana-ds.yml:/etc/grafana/provisioning/datasources/datasources.yml
   k6:
-    image: grafana/k6:latest
+    image: grafana/k6:v2
     networks:
       - k6
     volumes:
@@ -38,11 +38,11 @@ services:
       - K6_PROMETHEUS_RW_SERVER_URL=http://prometheus:9090/api/v1/write
       - K6_PROMETHEUS_RW_TREND_STATS=p(95),p(99),min,max
       - K6_PROMETHEUS_RW_TREND_AS_NATIVE_HISTOGRAM=true
-      # 1. Drop heavy, granular sub-metrics
-      - K6_PROMETHEUS_RW_FILTER_DATA=+*, -http_req_connecting, -http_req_tls_handshaking, -http_req_blocked, -http_req_waiting, -http_req_sending
+      # 1. Drop heavy, granular sub-metrics if too many write errors come
+      #- K6_PROMETHEUS_RW_FILTER_DATA=+*, -http_req_connecting, -http_req_tls_handshaking, -http_req_blocked, -http_req_waiting, -http_req_sending
 
     extra_hosts:
       - "host.docker.internal:host-gateway"
-    command: run -o experimental-prometheus-rw /scripts/benchmark-100k.js
+    command: run -o experimental-prometheus-rw /scripts/benchmark-5k.js
     depends_on:
       - prometheus

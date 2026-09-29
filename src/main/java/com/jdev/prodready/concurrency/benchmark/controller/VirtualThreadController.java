@@ -15,7 +15,7 @@ public class VirtualThreadController {
     public String simulateWork() throws InterruptedException {
         // Simulating 100ms downstream I/O latency (e.g., PostgreSQL query or microservice call)
         // Thread.sleep on a Virtual Thread unmounts the virtual thread from the carrier OS thread.
-        Thread.sleep(100);
+        Thread.sleep(200);
 
         return "Processed on: " + Thread.currentThread().toString();
     }
