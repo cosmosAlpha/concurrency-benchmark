@@ -120,3 +120,6 @@ k6 run -o experimental-prometheus-rw your-script.js
 ```bash
 docker network prune -f
 ```
+
+🎥 **Watch the full breakdown & step-by-step code walkthrough:**
+[![Watch the video](https://img.youtube.com/vi/uOz3MZqHDuo/0.jpg)](https://www.youtube.com/watch?v=uOz3MZqHDuo)
